@@ -1,0 +1,108 @@
+#!/usr/bin/env -S d2 --watch --layout elk --center -s
+
+# D2 is a modern diagram scripting language that allows users to create diagrams with ease.
+# It supports various layouts and styles, making it versatile for different types of diagrams.
+# The `--watch` flag enables live updates, while `--layout elk` specifies the layout engine to use.
+# The `--center` flag centers the diagram, and `-s` enables additional settings.
+
+# For More Information: vies the documentation at
+# Main Page `https://d2lang.com/`
+# Gtihub page `https://github.com/terrastruct/d2`
+
+# Classes
+Car: {
+	shape: class
+
+	- carId: int
+	- make: String
+	- model: String
+	- year: int
+	- color: String
+	- licensePlate: String
+	- pricePerDay: double
+	- availability_status: boolean
+	- mileage: double
+
+	+ isAvailable(): "boolean"
+	+ updateAvailability()
+	+ getPrice(): "double"
+	+ addCarToDatabase()
+}
+
+Customer: {
+	shape: class
+
+	- customerId: int
+	- firstName: String
+	- lastName: String
+	- email: String
+	- phoneNumber: String
+	- address: String
+	- driverLicenseNumber: String
+
+	+ reserveCar(): void
+	+ cancelReservation(): void
+}
+
+Database: {
+	shape: class
+
+	- URL: String
+	- Connection: conn
+	+ close(): void
+}
+
+FleetManager: {
+	shape: class
+
+	- employeeId: int
+	- firstName: String
+	- lastName: String
+	- role: String
+
+	+ addCarToFleet(): void
+	+ removeCarFromFleet(): void
+	update_car_details()
+	view_reservations()
+	generate_reports()
+}
+
+Payment: {
+	shape: class
+
+	- paymentId: int
+	- reservationId: int
+	- paymentDate: Date
+	- amount: double
+	- paymentMethod: String
+	- paymentStatus: String
+
+	+ processPayment()
+	+ refundPayment()
+}
+
+Reservation: {
+	shape: class
+
+	- reservationId: int
+	- carId: int
+	- customerId: int
+	- startDate: Date
+	- endDate: Data
+	- totalPrice: double
+	- reservationStatus: String
+
+	+ calculateTotalPrice()
+	+ confirm_reservation()
+	+ cancel_reservation(): double
+}
+
+# Relationships
+Car -> Reservation: "The person who rendte"
+
+Customer -> Reservation: "Makes"
+Reservation -> Payment: "Paid For"
+FleetManager -> Car: "Manages"
+Database <- Payment: "Stores"
+
+*.style.border-radius: 10
