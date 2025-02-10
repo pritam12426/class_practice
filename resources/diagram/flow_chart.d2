@@ -1,34 +1,59 @@
-#!/usr/bin/env -S d2 --watch --layout elk --center -s
+#!/usr/bin/env -S d2 --watch --layout elk --center
+
+classes: {
+	startEnd: {
+		shape: oval
+	}
+
+	Process: {
+		shape: rectangle
+	}
+
+	Decision: {
+		shape: diamond
+	}
+
+	IO: {
+		shape: parallelogram
+	}
+}
 
 start: "Start"
-input: "Enter a number (n)"
-condition1: "Is n ≤ 1?"
-not_prime: "Not Prime"
-loop_start: "Set i = 2"
-condition2: "Is i * i ≤ n?"
-check_div: "Is n % i == 0?"
-increment: "Increment i (i = i + 1)"
-prime: "Prime"
+catType: "Car Type"
+ConnectToDB: "Connect to DB"
 end: "End"
+Available: "Available"
+NotAvailable: "Not Available"
+AlternativeCar: "Alternative Car"
+conditionFor-Avaiable-AlternativeCAr: "Yes/No"
+payment: "Payment"
+paymentSuc: "Payment\nSuccessful"
+paymentUnSuc: "Payment\nUn Successful"
+paymentFail: "Payment\nFailed"
+Book: "Booking\nSuccessful"
 
-start -> input: "Start"
-input -> condition1: "Enter"
-condition1 -> not_prime: "Yes"
-not_prime -> end: "End"
 
-condition1 -> loop_start: "No"
-loop_start -> condition2: "Set"
-condition2 -> check_div: "Yes"
+start.class: startEnd
+end.class: startEnd
 
-check_div -> not_prime: "Yes"
-check_div -> increment: "No"
-increment -> condition2: "Increment"
+conditionFor-Avaiable-AlternativeCAr.class: Decision
+payment.class: Process
+paymentSuc.class: Decision
+paymentUnSuc.class: Decision
+paymentFail.class: Decision
+Book.class: IO
 
-condition2 -> prime: "No"
-prime -> end: "End"
-
-start.shape: oval
-start.style.stroke: deepskyblue
-end.shape: oval
-condition1.shape: diamond
-condition2.shape: diamond
+start -> catType
+catType -> ConnectToDB
+catType -> Available
+Available -> NotAvailable
+NotAvailable -> AlternativeCar
+AlternativeCar -> conditionFor-Avaiable-AlternativeCAr
+Available -> conditionFor-Avaiable-AlternativeCAr
+conditionFor-Avaiable-AlternativeCAr -> payment
+payment -> paymentSuc
+payment -> paymentUnSuc
+paymentUnSuc -> paymentFail
+paymentSuc -> Book
+Book -> end
+paymentFail -> end
