@@ -1,7 +1,14 @@
 # Class Project
 
 ## Overview
-This project is a car rental system implemented in Java. It allows users to manage a fleet of cars, handle customer reservations, process payments, and interact with a database to store and retrieve information.
+
+DriveEasy: Your Gateway
+to Smart Car Rentals
+
+
+A car rental system where users can book cars based on availability, rental period, and pricing.
+It implements inheritance for different vehicle types and interfaces for payment processing.
+
 
 ## Diagrams
 
@@ -16,6 +23,7 @@ This project is a car rental system implemented in Java. It allows users to mana
 ### Prerequisites
 - Java Development Kit (JDK) 8 or higher
 - Gradle 6.8.3 or higher for the build system
+
 
 ### Steps
 1. Clone the repository:
