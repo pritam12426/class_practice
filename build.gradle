@@ -1,0 +1,23 @@
+plugins {
+	id "java"
+	id "application" // This enables the `gradle run` task
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation "junit:junit:4.13.2"
+	implementation "org.xerial:sqlite-jdbc:3.45.1.0"
+	implementation "org.slf4j:slf4j-api:1.7.32"
+	implementation "ch.qos.logback:logback-classic:1.2.6"
+}
+
+application {
+	mainClass = "com.App.Main" // Make sure this matches your main class name and package
+}
+
+tasks.named("run") {
+	standardInput = System.in  // Use standard input for the process
+}

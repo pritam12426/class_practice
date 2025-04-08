@@ -1,0 +1,65 @@
+#!/usr/bin/env -S d2 --watch --layout elk --center -s
+
+# D2 is a modern diagram scripting language that allows users to create diagrams with ease.
+# It supports various layouts and styles, making it versatile for different types of diagrams.
+# The `--watch` flag enables live updates, while `--layout elk` specifies the layout engine to use.
+# The `--center` flag centers the diagram, and `-s` enables additional settings.
+
+# For More Information: vies the documentation at
+# Main Page `https://d2lang.com/`
+# Gtihub page `https://github.com/terrastruct/d2`
+
+Cars: {
+	shape: sql_table
+
+	car_id: INTEGER {constraint: primary_key}
+	make: INTEGER
+	modle: TEXT
+	year: INTEGER
+	color: TEXT
+	license_plate: TEXT
+	price_per_day: REAL
+	availability_status: BOOLEAN
+	mileage REAL: REAL
+}
+
+Customers: {
+	shape: sql_table
+
+	customer_id: INTEGER {constraint: primary_key}
+	first_name: TEXT
+	last_name: TEXT
+	email: TEXT
+	phone_number: TEXT
+	address: TEXT
+	driver_license_number: TEXT
+}
+
+Reservations: {
+	shape: sql_table
+
+	reservation_id: INTEGER {constraint: primary_key}
+	car_id: INTEGER {constraint: foreign_key}
+	customer_id: INTEGER {constraint: foreign_key}
+	start_date: DATE
+	end_date: DATE
+	total_price: REAL
+	reservation_status: TEXT
+}
+
+Payments: {
+	shape: sql_table
+
+	payment_id: INTEGER {constraint: primary_key}
+	reservation_id: INTEGER {constraint: foreign_key}
+	payment_date: DATE
+	amount: REAL
+	payment_method: TEXT
+	payment_status: TEXT
+}
+
+reservations.car_id      -> cars.car_id
+reservations.customer_id -> customers.customer_id
+payments.reservation_id  -> reservations.reservation_id
+
+*.style.border-radius: 5

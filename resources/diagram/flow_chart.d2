@@ -1,0 +1,59 @@
+#!/usr/bin/env -S d2 --watch --layout elk --center
+
+classes: {
+	startEnd: {
+		shape: oval
+	}
+
+	Process: {
+		shape: rectangle
+	}
+
+	Decision: {
+		shape: diamond
+	}
+
+	IO: {
+		shape: parallelogram
+	}
+}
+
+start: "Start"
+catType: "Car Type"
+ConnectToDB: "Connect to DB"
+end: "End"
+Available: "Available"
+NotAvailable: "Not Available"
+AlternativeCar: "Alternative Car"
+conditionFor-Avaiable-AlternativeCAr: "Yes/No"
+payment: "Payment"
+paymentSuc: "Payment\nSuccessful"
+paymentUnSuc: "Payment\nUn Successful"
+paymentFail: "Payment\nFailed"
+Book: "Booking\nSuccessful"
+
+
+start.class: startEnd
+end.class: startEnd
+
+conditionFor-Avaiable-AlternativeCAr.class: Decision
+payment.class: Process
+paymentSuc.class: Decision
+paymentUnSuc.class: Decision
+paymentFail.class: Decision
+Book.class: IO
+
+start -> catType
+catType -> ConnectToDB
+catType -> Available
+Available -> NotAvailable
+NotAvailable -> AlternativeCar
+AlternativeCar -> conditionFor-Avaiable-AlternativeCAr
+Available -> conditionFor-Avaiable-AlternativeCAr
+conditionFor-Avaiable-AlternativeCAr -> payment
+payment -> paymentSuc
+payment -> paymentUnSuc
+paymentUnSuc -> paymentFail
+paymentSuc -> Book
+Book -> end
+paymentFail -> end
