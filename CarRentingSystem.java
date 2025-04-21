@@ -8,14 +8,16 @@ class Car {
 	private boolean isRented;
 	private double rentalPricePerDay;
 	private int rentalDays;
+	private int totalRentalCount;
 
 	public Car(int id, String brand, String model, double rentalPricePerDay) {
 		this.id                = id;
 		this.brand             = brand;
 		this.model             = model;
-		this.isRented          = false;
 		this.rentalPricePerDay = rentalPricePerDay;
+		this.isRented          = false;
 		this.rentalDays        = 0;
+		this.totalRentalCount  = 0;
 	}
 
 	public int getId() {
@@ -42,9 +44,14 @@ class Car {
 		return rentalDays;
 	}
 
+	public int getTotalRentalCount() {
+		return totalRentalCount;
+	}
+
 	public void rent(int days) {
 		isRented   = true;
 		rentalDays = days;
+		totalRentalCount++;
 	}
 
 	public void returnCar() {
@@ -55,16 +62,28 @@ class Car {
 	@Override
 	public String toString() {
 		return "Car ID: " + id + ", " + brand + " " + model + ", Price per day: ₹" + rentalPricePerDay
-		    + (isRented ? " [RENTED for " + rentalDays + " days]" : " [AVAILABLE]");
+		    + (isRented ? " [RENTED for " + rentalDays + " days]" : " [AVAILABLE]")
+		    + ", Total Rentals: " + totalRentalCount;
 	}
 }
 
 public class CarRentingSystem {
 	private static ArrayList<Car> carList = new ArrayList<>();
 	private static int nextId             = 1;
+	private static CarRentingSystem instance;
+
+	private CarRentingSystem() {}
+
+	public static CarRentingSystem getInstance() {
+		if (instance == null) {
+			instance = new CarRentingSystem();
+		}
+		return instance;
+	}
 
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
+		Scanner scanner         = new Scanner(System.in);
+		CarRentingSystem system = CarRentingSystem.getInstance();
 		int choice;
 
 		System.out.println("Welcome to the Car Renting System!");
@@ -76,50 +95,41 @@ public class CarRentingSystem {
 			System.out.println("4. Return a Car");
 			System.out.println("5. Calculate Rental Cost");
 			System.out.println("6. View Rental History");
-			System.out.println("7. Exit");
+			System.out.println("7. View Most Rented Car");
+			System.out.println("8. Exit");
 			System.out.print("Enter choice: ");
 			choice = scanner.nextInt();
 
 			switch (choice) {
-				case 1:
-					addCar(scanner);
-					break;
-				case 2:
-					viewCars();
-					break;
-				case 3:
-					rentCar(scanner);
-					break;
-				case 4:
-					returnCar(scanner);
-					break;
-				case 5:
-					calculateRentalCost(scanner);
-					break;
-				case 6:
-					viewRentalHistory(scanner);
-					break;
-				case 7:
+				case 1 -> system.addCar(scanner);
+				case 2 -> system.viewCars();
+				case 3 -> system.rentCar(scanner);
+				case 4 -> system.returnCar(scanner);
+				case 5 -> system.calculateRentalCost(scanner);
+				case 6 -> system.viewRentalHistory(scanner);
+				case 7 -> system.viewMostRentedCar();
+				case 8 -> {
 					System.out.println("Thank you for using the system!");
 					return;
-				default:
-					System.out.println("Invalid option.");
+				}
+				default -> System.out.println("Invalid option.");
 			}
 		}
 	}
 
-	private static void addCar(Scanner scanner) {
+	private void addCar(Scanner scanner) {
 		System.out.print("Enter brand: ");
 		String brand = scanner.next();
 		System.out.print("Enter model: ");
 		String model = scanner.next();
 		System.out.print("Enter rental price per day: ");
 		double rentalPricePerDay = scanner.nextDouble();
-		carList.add(new Car(nextId++, brand, model, rentalPricePerDay));
-		System.out.println("Car added successfully!");
+		Car newCar               = new Car(nextId++, brand, model, rentalPricePerDay);
+		carList.add(newCar);
+		System.out.println("Car added successfully! Instance: " + newCar);
 	}
 
-	private static void viewCars() {
+	private void viewCars() {
 		if (carList.isEmpty()) {
 			System.out.println("No cars available.");
 			return;
@@ -129,7 +139,7 @@ public class CarRentingSystem {
 		}
 	}
 
-	private static void rentCar(Scanner scanner) {
+	private void rentCar(Scanner scanner) {
 		System.out.print("Enter Car ID to rent: ");
 		int id = scanner.nextInt();
 		System.out.print("Enter number of rental days: ");
@@ -149,7 +159,7 @@ public class CarRentingSystem {
 		System.out.println("Car ID not found.");
 	}
 
-	private static void returnCar(Scanner scanner) {
+	private void returnCar(Scanner scanner) {
 		System.out.print("Enter Car ID to return: ");
 		int id = scanner.nextInt();
 		for (Car car : carList) {
@@ -167,7 +177,7 @@ public class CarRentingSystem {
 		System.out.println("Car ID not found.");
 	}
 
-	private static void calculateRentalCost(Scanner scanner) {
+	private void calculateRentalCost(Scanner scanner) {
 		System.out.print("Enter Car ID to calculate rental cost: ");
 		int id = scanner.nextInt();
 		System.out.print("Enter number of rental days: ");
@@ -182,17 +192,33 @@ public class CarRentingSystem {
 		System.out.println("Car ID not found.");
 	}
 
-	private static void viewRentalHistory(Scanner scanner) {
+	private void viewRentalHistory(Scanner scanner) {
 		System.out.print("Enter Car ID to view rental history: ");
 		int id = scanner.nextInt();
 		for (Car car : carList) {
 			if (car.getId() == id) {
 				System.out.println("Rental history for Car ID " + id + ": "
 				    + (car.isRented() ? "Currently rented for " + car.getRentalDays() + " days"
-				                      : "Not currently rented"));
+				                      : "Not currently rented")
+				    + ", Total Rentals: " + car.getTotalRentalCount());
 				return;
 			}
 		}
 		System.out.println("Car ID not found.");
+	}
+
+	private void viewMostRentedCar() {
+		if (carList.isEmpty()) {
+			System.out.println("No cars available.");
+			return;
+		}
+		Car mostRentedCar = null;
+		for (Car car : carList) {
+			if (mostRentedCar == null
+			    || car.getTotalRentalCount() > mostRentedCar.getTotalRentalCount()) {
+				mostRentedCar = car;
+			}
+		}
+		System.out.println("Most rented car: " + mostRentedCar);
 	}
 }
